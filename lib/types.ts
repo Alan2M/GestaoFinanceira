@@ -1,0 +1,9 @@
+export type Account={id:string;name:string;type:string;balance:number;institution?:string};
+export type Category={id:string;name:string;type:string;color?:string;parent_id?:string|null};
+export type Card={id:string;name:string;limit_amount:number;closing_day:number;due_day:number;account_id?:string|null};
+export type Transaction={id:string;date:string;description:string;type:"income"|"expense";amount:number;account_id?:string|null;category_id?:string|null;card_id?:string|null;person?:string;notes?:string;installment_current?:number|null;installment_total?:number|null;recurrence?:string|null;status?:string};
+export type Budget={id:string;month:string;category_id:string;planned:number};
+export type Bill={id:string;description:string;type:"payable"|"receivable";amount:number;due_date:string;status:"paid"|"pending"|"overdue";category_id?:string|null;account_id?:string|null};
+export type Asset={id:string;name:string;type:string;current_value:number};
+export type Debt={id:string;name:string;type:string;original_amount:number;outstanding_amount:number;monthly_payment?:number|null};
+export type Goal={id:string;name:string;target_amount:number;current_amount:number;target_date?:string|null};
