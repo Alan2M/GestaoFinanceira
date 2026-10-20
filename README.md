@@ -51,3 +51,13 @@ Nunca publique chaves secret/service_role no navegador. O app usa apenas a Publi
 - Notificações de vencimento
 - Multiusuário familiar com permissões
 - Passkeys/2FA
+
+## Atualização: compras parceladas no cartão (outubro/2026)
+- Ao criar um lançamento de **despesa**, selecione o cartão, a forma **Parcelado**, o valor **total da compra**, a data da compra e o número de parcelas.
+- O sistema cria uma transação para **cada parcela** diretamente no Supabase. Usa o dia de fechamento e vencimento do cartão para estabelecer a primeira fatura; as seguintes vencem mensalmente. O cálculo considera meses curtos e arredondamento em centavos.
+- Cartões > Previsão das próximas faturas mostra **12 meses**. Fluxo futuro também cobre 12 meses. A listagem de lançamentos identifica o número de cada parcela. Parcelas do cartão começam pendentes; há botão **Marcar paga** no lançamento.
+- Exemplo: fechamento dia 20, vencimento dia 10; compra em 19/10/2026 em 3x de R$ 300: parcelas de R$ 100 vencem em 10/11/2026, 10/12/2026 e 10/01/2027. Uma compra em 21/10 começaria em 10/12.
+- **Não requer atualização de SQL**: utiliza os campos `recurrence_group`, `installment_current`, `installment_total`, `date` e `status` já presentes no schema.
+- **Atenção aos dados anteriores:** compras antigas que já foram cadastradas incorretamente **não são recriadas automaticamente**, para evitar duplicidades. Confira a lista de transações, exclua as parcelas erradas e registre a compra novamente se necessário. Antes disso, faça backup CSV.
+- Para testar o algoritmo: `npm run test`. O teste usa o suporte experimental de TypeScript embutido no Node 22+.
+- O valor de uma compra no cartão é reconhecido no mês do **vencimento** da fatura (não no mês em que ela foi realizada). O sistema não efetua pagamento bancário nem altera automaticamente o saldo da conta ao marcar uma parcela paga.
